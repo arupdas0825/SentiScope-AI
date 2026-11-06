@@ -544,5 +544,5 @@ This project is licensed under the **MIT License**. See the `LICENSE` file for d
 ---
 
 <div align="center">
-  <sub>Developed by Arup Das · Department of Computer Science & Engineering (AI/ML) · Brainware University</sub>
+  <sub>Developed by Arup Das & Teams · Department of Computer Science & Engineering (AI/ML) · Brainware University</sub>
 </div>
