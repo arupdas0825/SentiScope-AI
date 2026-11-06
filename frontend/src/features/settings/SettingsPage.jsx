@@ -90,24 +90,45 @@ export function SettingsPage() {
         </Card>
 
         {/* Project & Academic Attribution */}
-        <Card title="Academic Attribution" subtitle="University project metadata" className="md:col-span-2">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
-            <div className="p-3.5 bg-surface-muted rounded-xl border border-border space-y-1">
-              <span className="text-text-muted font-medium block">Project Lead</span>
-              <span className="font-bold text-text block">Arup Das</span>
-              <span className="text-[11px] text-text-muted block">B.Tech CSE (AI/ML)</span>
+        <Card title="Academic Attribution & Team" subtitle="Brainware University Capstone Project Metadata" className="md:col-span-2">
+          <div className="space-y-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 text-xs">
+              <div className="p-3.5 bg-surface-muted rounded-xl border border-border space-y-1">
+                <span className="text-text-muted font-medium block">Project Lead & Full-Stack</span>
+                <span className="font-bold text-text block text-sm">Arup Das</span>
+                <span className="text-[11px] font-mono text-primary block">BWU/BTA/24/641</span>
+                <span className="text-[10px] text-text-muted block">Architecture & Integration</span>
+              </div>
+
+              <div className="p-3.5 bg-surface-muted rounded-xl border border-border space-y-1">
+                <span className="text-text-muted font-medium block">Backend & Database</span>
+                <span className="font-bold text-text block text-sm">Rajarshi Laksman</span>
+                <span className="text-[11px] font-mono text-primary block">BWU/BTA/24/638</span>
+                <span className="text-[10px] text-text-muted block">FastAPI & SQLAlchemy</span>
+              </div>
+
+              <div className="p-3.5 bg-surface-muted rounded-xl border border-border space-y-1">
+                <span className="text-text-muted font-medium block">AI/ML Engineer</span>
+                <span className="font-bold text-text block text-sm">Aditya Bar</span>
+                <span className="text-[11px] font-mono text-primary block">BWU/BTA/24/651</span>
+                <span className="text-[10px] text-text-muted block">NLP Pipeline & Modeling</span>
+              </div>
+
+              <div className="p-3.5 bg-surface-muted rounded-xl border border-border space-y-1">
+                <span className="text-text-muted font-medium block">Frontend & UI/UX</span>
+                <span className="font-bold text-text block text-sm">Pranay Naskar</span>
+                <span className="text-[11px] font-mono text-primary block">BWU/BTA/24/656</span>
+                <span className="text-[10px] text-text-muted block">React Dashboard & Charts</span>
+              </div>
             </div>
 
-            <div className="p-3.5 bg-surface-muted rounded-xl border border-border space-y-1">
-              <span className="text-text-muted font-medium block">Institution</span>
-              <span className="font-bold text-text block">Brainware University</span>
-              <span className="text-[11px] text-text-muted block">Kolkata, West Bengal</span>
-            </div>
-
-            <div className="p-3.5 bg-surface-muted rounded-xl border border-border space-y-1">
-              <span className="text-text-muted font-medium block">Topic</span>
-              <span className="font-bold text-text block">Sentiment Analysis (Social Analytics)</span>
-              <span className="text-[11px] text-text-muted block">Academic Capstone Deliverable</span>
+            <div className="p-3 bg-surface-muted/60 rounded-lg border border-border/70 flex flex-wrap items-center justify-between gap-2 text-xs text-text-muted">
+              <div>
+                <span className="font-semibold text-text">Department:</span> Department of Computer Science & Engineering (Artificial Intelligence)
+              </div>
+              <div>
+                <span className="font-semibold text-text">Institution:</span> Brainware University, Kolkata
+              </div>
             </div>
           </div>
         </Card>

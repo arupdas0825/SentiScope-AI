@@ -478,16 +478,14 @@ The baseline models were trained and benchmarked using the **CardiffNLP TweetEva
 
 ## 14. 👥 Project Team
 
-This project is submitted as an academic lab capstone under Brainware University.
+This project is designed, developed, and submitted as an academic AIML lab project under the **Department of Computer Science & Engineering (Artificial Intelligence), Brainware University**.
 
-| Full Name | Student Code | University Roll No. | Registration No. | Project Responsibility |
-|---|---|---|---|---|
-| **Arup Das** | *[Student Code]* | *[Roll Number]* | *[Registration Number]* | Architecture, ML Pipeline, Backend & Frontend Development |
-| *[Team Member 2]* | *[Pending]* | *[Pending]* | *[Pending]* | *[To be updated by Project Owner]* |
-| *[Team Member 3]* | *[Pending]* | *[Pending]* | *[Pending]* | *[To be updated by Project Owner]* |
-| *[Team Member 4]* | *[Pending]* | *[Pending]* | *[Pending]* | *[To be updated by Project Owner]* |
-
-> **Note to Project Owner:** Please supply the exact Student Codes, Roll Numbers, Registration Numbers, and additional member names for the placeholders above prior to final institutional evaluation.
+| Sl. | Full Name | Student Code | Role | Key Responsibilities |
+|:---:|:---|:---:|:---|:---|
+| 1 | **Arup Das** | `BWU/BTA/24/641` | **Project Lead & Full-Stack Integration Lead** | Project coordination, architecture design, API integration, and final end-to-end testing |
+| 2 | **Rajarshi Laksman** | `BWU/BTA/24/638` | **Backend Developer & Database Engineer** | FastAPI backend architecture, REST API design, SQLite & SQLAlchemy integration, data management |
+| 3 | **Aditya Bar** | `BWU/BTA/24/651` | **AI/ML Engineer** | Dataset preprocessing & pipeline, TF-IDF feature engineering, Logistic Regression model training & evaluation |
+| 4 | **Pranay Naskar** | `BWU/BTA/24/656` | **Frontend Developer & UI/UX Designer** | React analytics dashboard, UI/UX design, interactive charts, and responsive SaaS interface |
 
 ---
 
