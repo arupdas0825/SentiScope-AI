@@ -1,0 +1,19 @@
+{
+  "model_id": "tfidf-logreg",
+  "version": "20261106-v1.0.0",
+  "hyperparameters": {
+    "ngram_range": [
+      1,
+      2
+    ],
+    "max_features": 25000,
+    "C": 1.0,
+    "class_weight": "balanced"
+  },
+  "artifacts": {
+    "model": "model.joblib",
+    "metrics": "metrics.json",
+    "confusion_matrix_png": "confusion_matrix.png",
+    "confusion_matrix_svg": "confusion_matrix.svg"
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "model_id": "tfidf-logreg",
+  "model_version": "20261106-v1.0.0",
+  "kind": "trained",
+  "dataset_name": "TweetEval Sentiment (SemEval-2017 Task 4)",
+  "accuracy": 0.5856,
+  "macro_f1": 0.5836,
+  "weighted_f1": 0.5844,
+  "classes": [
+    "negative",
+    "neutral",
+    "positive"
+  ],
+  "per_class": {
+    "negative": {
+      "precision": 0.5392,
+      "recall": 0.6858,
+      "f1_score": 0.6037,
+      "support": 3972
+    },
+    "neutral": {
+      "precision": 0.6487,
+      "recall": 0.5203,
+      "f1_score": 0.5774,
+      "support": 5937
+    },
+    "positive": {
+      "precision": 0.5587,
+      "recall": 0.5811,
+      "f1_score": 0.5697,
+      "support": 2375
+    }
+  },
+  "confusion_matrix": [
+    [
+      2724,
+      1014,
+      234
+    ],
+    [
+      1992,
+      3089,
+      856
+    ],
+    [
+      336,
+      659,
+      1380
+    ]
+  ],
+  "training_time_seconds": 8.44,
+  "evaluated_at": "2026-11-06T17:13:25Z",
+  "test_sample_count": 12284
+}

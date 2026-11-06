@@ -1,0 +1,80 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Light Theme (Default) per DESIGN.md §3 */
+  --bg: #F6F8FB;
+  --surface: #FFFFFF;
+  --surface-muted: #F1F4F8;
+  --text: #172033;
+  --text-muted: #687386;
+  --border: #E3E8EF;
+  
+  --primary: #315FEA;
+  --primary-hover: #254BC4;
+  
+  --positive: #159A68;
+  --positive-soft: #E7F6F0;
+  
+  --negative: #D94B55;
+  --negative-soft: #FDEEEE;
+  
+  --neutral: #D18A24;
+  --neutral-soft: #FEF6EB;
+  
+  --info: #3978C8;
+  --warning: #B7791F;
+  --danger: #C83D49;
+}
+
+.dark {
+  /* Dark Theme per DESIGN.md §3 */
+  --bg: #10151F;
+  --surface: #171F2C;
+  --surface-muted: #202B3A;
+  --text: #EDF2F8;
+  --text-muted: #A3AFBF;
+  --border: #2B394B;
+  
+  --primary: #83A5FF;
+  --primary-hover: #98B5FF;
+  
+  --positive: #43C995;
+  --positive-soft: #123325;
+  
+  --negative: #FF747C;
+  --negative-soft: #381B20;
+  
+  --neutral: #F0B95D;
+  --neutral-soft: #382B14;
+  
+  --info: #83B8FF;
+  --warning: #F0B95D;
+  --danger: #FF747C;
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background-color: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
