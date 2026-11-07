@@ -87,11 +87,32 @@ export const api = {
   getHealth: () => fetchJSON("/health"),
 
   // Single Text Sentiment Analysis
-  analyzeSingle: (text, modelId = "tfidf-logreg", explain = true) =>
+  analyzeSingle: (text, modelId = "tfidf-logreg", explain = true, language = "auto") =>
     fetchJSON("/analyze", {
       method: "POST",
-      body: JSON.stringify({ text, model_id: modelId, explain }),
+      body: JSON.stringify({ text, model_id: modelId, explain, language }),
     }),
+
+  // Explainable AI (SHAP / LIME Token Attributions)
+  explainPrediction: (text, modelId = "tfidf-logreg") =>
+    fetchJSON("/analyze/explain", {
+      method: "POST",
+      body: JSON.stringify({ text, model_id: modelId }),
+    }),
+
+  // Aspect-Based Sentiment Analysis (ABSA)
+  analyzeAspects: (text, modelId = "tfidf-logreg") =>
+    fetchJSON("/analyze/aspects", {
+      method: "POST",
+      body: JSON.stringify({ text, model_id: modelId }),
+    }),
+
+  // Supported Multilingual Languages
+  getLanguages: () => fetchJSON("/analyze/languages"),
+
+  // Real-world Dataset Presets
+  getSampleDatasets: () => fetchJSON("/datasets/samples"),
+  getSampleDatasetDetail: (datasetId) => fetchJSON(`/datasets/samples/${datasetId}`),
 
   // Bulk Text Sentiment Analysis
   analyzeBulk: (texts, modelId = "tfidf-logreg") =>

@@ -1,5 +1,5 @@
 """Schemas for sentiment analysis requests and responses."""
-from typing import Dict, List, Optional
+from typing import Any, Dict, List, Optional
 from pydantic import BaseModel, Field
 
 
@@ -7,6 +7,7 @@ class SingleTextRequest(BaseModel):
     text: str = Field(..., min_length=1, max_length=2000, description="Input text to analyze")
     model_id: Optional[str] = Field("tfidf-logreg", description="Engine ID to use")
     explain: Optional[bool] = Field(False, description="Whether to include token-level attributions")
+    language: Optional[str] = Field("auto", description="Language: auto, en, bn, hi")
 
 
 class Probabilities(BaseModel):
@@ -30,6 +31,9 @@ class PredictionResult(BaseModel):
     model_version: str
     latency_ms: float
     explanations: Optional[List[ExplanationToken]] = None
+    language: Optional[Dict[str, str]] = None
+    influential_words: Optional[List[Dict[str, Any]]] = None
+    explanation_summary: Optional[str] = None
 
 
 class BulkTextRequest(BaseModel):

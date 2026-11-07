@@ -9,6 +9,7 @@ from backend.app.core.errors import ModelUnavailable, AppException
 from backend.app.ml.engines.base import BaseEngine
 from backend.app.ml.engines.tfidf_logreg import TfidfLogRegEngine
 from backend.app.ml.engines.vader import VaderEngine
+from backend.app.ml.engines.distilbert import DistilBertEngine
 
 logger = logging.getLogger("sentiscope.ml.registry")
 
@@ -60,6 +61,18 @@ class ModelRegistry:
             except Exception as e:
                 logger.error(f"Failed to load VADER engine: {e}", exc_info=True)
                 raise ModelUnavailable(f"VADER Lexicon engine failed to load: {e}") from e
+
+        elif model_id == "distilbert":
+            try:
+                engine = DistilBertEngine()
+                self._loaded_engines[model_id] = engine
+                logger.info(f"Model engine '{model_id}' loaded and cached.")
+                return engine
+            except AppException:
+                raise
+            except Exception as e:
+                logger.error(f"Failed to load DistilBERT engine: {e}", exc_info=True)
+                raise ModelUnavailable(f"DistilBERT Transformer engine failed to load: {e}") from e
 
         raise ModelUnavailable(f"Model engine '{model_id}' is not registered.")
 
@@ -116,7 +129,19 @@ class ModelRegistry:
                 "supports_neutral": True,
                 "classes": ["negative", "neutral", "positive"],
                 "is_default": False,
-                "metrics": None
+                "metrics": self.get_metrics("vader")
+            },
+            {
+                "id": "distilbert-transformer-v1",
+                "model_id": "distilbert",
+                "name": "DistilBERT Fine-Tuned Transformer",
+                "kind": "transformer",
+                "architecture": "Transformer (DistilBERT 6-Layer Self-Attention)",
+                "version": "distilbert-base-uncased-finetuned-v1",
+                "supports_neutral": True,
+                "classes": ["negative", "neutral", "positive"],
+                "is_default": False,
+                "metrics": self.get_metrics("distilbert")
             }
         ]
         return models

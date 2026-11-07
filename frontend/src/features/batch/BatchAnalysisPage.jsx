@@ -14,6 +14,41 @@ import { Card } from "../../components/common/Card";
 import { Badge } from "../../components/common/Badge";
 import { Button } from "../../components/common/Button";
 
+const REAL_WORLD_PRESETS = [
+  {
+    title: "📱 Smartphone Reviews",
+    texts: [
+      "The camera quality is absolutely breathtaking, but the battery drains in 4 hours.",
+      "Very smooth 120Hz display and snappy processor. Excellent gaming performance!",
+      "Worst smartphone purchase ever. Screen flickers constantly and customer support was completely useless.",
+      "Decent phone for the price tag. Normal battery life and standard photos.",
+      "Super fast delivery! Packaging was solid and phone works like a charm. Highly recommend.",
+      "Build quality feels cheap and plastic. Heavy heating issue when recording 4K video.",
+      "Clean stock Android UI without any bloatware. Extremely satisfied with software updates.",
+      "Overpriced garbage. Camera lags when opening and speaker sound is tinny."
+    ]
+  },
+  {
+    title: "🐦 Twitter/X Feed",
+    texts: [
+      "Just tried the new AI copilot update and wow, my productivity doubled today! Incredible release.",
+      "Another broken API release with zero backwards compatibility. Dev teams are suffering tonight.",
+      "The conference keynote was okay. Nothing groundbreaking, but nice incremental hardware bumps.",
+      "Customer service took 4 days to reply only to send an automated link. Absolute disaster.",
+      "Loving the clean minimalist redesign! So fast and responsive on mobile."
+    ]
+  },
+  {
+    title: "☁️ SaaS Reviews",
+    texts: [
+      "Zero downtime over the past 12 months. The API response times are sub-50ms.",
+      "Hidden cost increase on renewal without notice. We are seriously evaluating competitors.",
+      "Dashboard analytics are straightforward and export features save our data team hours weekly.",
+      "Documentation is outdated and SDK throws cryptic 500 errors on large payloads."
+    ]
+  }
+];
+
 export function BatchAnalysisPage() {
   const [activeTab, setActiveTab] = useState("paste"); // 'paste' | 'csv'
 
@@ -127,6 +162,7 @@ export function BatchAnalysisPage() {
             onChange={(e) => setModelId(e.target.value)}
             className="text-xs bg-surface-muted border border-border rounded-lg px-2.5 py-1 text-text focus:outline-none focus:ring-1 focus:ring-primary cursor-pointer font-medium"
           >
+            <option value="distilbert">DistilBERT Transformer (Top Accuracy)</option>
             <option value="tfidf-logreg">Trained: TF-IDF + Logistic Regression</option>
             <option value="keras-lstm">Deep Learning: Keras BiLSTM</option>
             <option value="vader">Lexicon: VADER Rule-Based</option>
@@ -146,6 +182,28 @@ export function BatchAnalysisPage() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           <div className="lg:col-span-5 space-y-4">
             <Card title="Input Multiline Texts" subtitle="One comment per line">
+              {/* Real-World Preset Feeds */}
+              <div className="mb-3 p-2.5 bg-surface-muted rounded-xl border border-border">
+                <span className="text-[11px] font-semibold text-text-muted block mb-1.5 uppercase tracking-wider">
+                  Quick Load Real-World Feeds:
+                </span>
+                <div className="flex flex-wrap gap-2">
+                  {REAL_WORLD_PRESETS.map((preset, idx) => (
+                    <button
+                      key={idx}
+                      type="button"
+                      onClick={() => {
+                        setPastedText(preset.texts.join("\n"));
+                        setBulkResults(null);
+                      }}
+                      className="text-xs px-2.5 py-1 bg-surface hover:bg-border/60 border border-border rounded-lg text-text font-medium transition-colors cursor-pointer"
+                    >
+                      {preset.title} ({preset.texts.length})
+                    </button>
+                  ))}
+                </div>
+              </div>
+
               <form onSubmit={handleBulkSubmit} className="space-y-4">
                 <textarea
                   value={pastedText}

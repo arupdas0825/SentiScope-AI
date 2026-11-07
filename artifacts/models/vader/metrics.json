@@ -1,0 +1,52 @@
+{
+  "model_id": "vader",
+  "model_version": "vader-lexicon-3.3.2",
+  "kind": "lexicon",
+  "architecture": "Rule-Based Lexicon & Sentiment Heuristics",
+  "dataset_name": "TweetEval Sentiment (SemEval-2017 Task 4)",
+  "accuracy": 0.5296,
+  "macro_f1": 0.5262,
+  "weighted_f1": 0.5374,
+  "classes": [
+    "negative",
+    "neutral",
+    "positive"
+  ],
+  "per_class": {
+    "negative": {
+      "precision": 0.6049,
+      "recall": 0.5481,
+      "f1_score": 0.5751,
+      "support": 3972
+    },
+    "neutral": {
+      "precision": 0.66,
+      "recall": 0.461,
+      "f1_score": 0.5428,
+      "support": 5937
+    },
+    "positive": {
+      "precision": 0.3508,
+      "recall": 0.6703,
+      "f1_score": 0.4606,
+      "support": 2375
+    }
+  },
+  "confusion_matrix": [
+    [
+      2177,
+      788,
+      1007
+    ],
+    [
+      1261,
+      2737,
+      1939
+    ],
+    [
+      161,
+      622,
+      1592
+    ]
+  ]
+}

@@ -104,14 +104,13 @@ def create_app() -> FastAPI:
     @app.on_event("startup")
     def on_startup():
         init_db()
-        # Pre-warm NLTK VADER lexicon if available
+        # Verify VADER lexicon availability without blocking network download
         try:
             import nltk
             try:
                 nltk.data.find("sentiment/vader_lexicon.zip")
             except (LookupError, AttributeError):
-                logger.info("Downloading NLTK vader_lexicon on application startup...")
-                nltk.download("vader_lexicon", quiet=True)
+                pass
         except Exception as e:
             logger.warning(f"Startup VADER pre-warm non-critical failure: {e}")
 

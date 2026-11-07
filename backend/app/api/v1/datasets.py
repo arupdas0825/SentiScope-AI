@@ -12,8 +12,24 @@ from backend.app.core.errors import ValidationFailed, PayloadTooLarge
 from backend.app.db.models import Dataset, AnalysisRun, Prediction
 from backend.app.db.session import get_db
 from backend.app.ml.registry import model_registry
+from backend.app.services.realworld_data import RealWorldDataService
 
 router = APIRouter(prefix="/datasets", tags=["Datasets"])
+
+
+@router.get("/samples")
+def get_sample_datasets():
+    """Retrieve pre-configured real-world benchmark datasets for 1-click batch analysis."""
+    return RealWorldDataService.list_preset_datasets()
+
+
+@router.get("/samples/{dataset_id}")
+def get_sample_dataset_detail(dataset_id: str):
+    """Retrieve details and records for a specific real-world sample dataset."""
+    data = RealWorldDataService.get_dataset_details(dataset_id)
+    if not data:
+        raise HTTPException(status_code=404, detail=f"Sample dataset '{dataset_id}' not found.")
+    return data
 
 
 @router.post("/upload")

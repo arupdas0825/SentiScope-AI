@@ -17,32 +17,32 @@ class VaderEngine(BaseEngine):
         self.analyzer = self._init_analyzer()
 
     def _init_analyzer(self):
-        # 1. Try NLTK SentimentIntensityAnalyzer
-        try:
-            import nltk
-            try:
-                nltk.data.find("sentiment/vader_lexicon.zip")
-            except (LookupError, AttributeError):
-                logger.info("Downloading NLTK vader_lexicon...")
-                nltk.download("vader_lexicon", quiet=True)
-            from nltk.sentiment.vader import SentimentIntensityAnalyzer
-            analyzer = SentimentIntensityAnalyzer()
-            logger.info("VADER engine successfully initialized via NLTK.")
-            return analyzer
-        except Exception as e_nltk:
-            logger.warning(f"NLTK VADER initialization skipped/failed: {e_nltk}. Attempting fallback...")
-
-        # 2. Try standalone vaderSentiment package
+        # 1. Try standalone vaderSentiment package (self-contained, zero-download)
         try:
             from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
             analyzer = SentimentIntensityAnalyzer()
             logger.info("VADER engine successfully initialized via vaderSentiment package.")
             return analyzer
-        except Exception as e_vader:
-            logger.error(f"vaderSentiment initialization failed: {e_vader}")
-            raise ModelUnavailable(
-                f"VADER lexicon engine could not be initialized. Missing NLTK lexicon and vaderSentiment."
-            )
+        except Exception:
+            pass
+
+        # 2. Try NLTK SentimentIntensityAnalyzer if lexicon already present
+        try:
+            import nltk
+            try:
+                nltk.data.find("sentiment/vader_lexicon.zip")
+                from nltk.sentiment.vader import SentimentIntensityAnalyzer
+                analyzer = SentimentIntensityAnalyzer()
+                logger.info("VADER engine successfully initialized via NLTK.")
+                return analyzer
+            except (LookupError, AttributeError):
+                pass
+        except Exception:
+            pass
+
+        raise ModelUnavailable(
+            "VADER lexicon engine could not be initialized. Missing vaderSentiment or NLTK vader_lexicon."
+        )
 
     def predict(self, texts: Sequence[str], explain: bool = False) -> List[EnginePrediction]:
         results = []
