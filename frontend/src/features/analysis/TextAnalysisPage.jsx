@@ -99,6 +99,7 @@ export function TextAnalysisPage() {
                     className="text-xs bg-surface-muted border border-border rounded-lg px-2.5 py-1.5 text-text focus:outline-none focus:ring-1 focus:ring-primary cursor-pointer"
                   >
                     <option value="tfidf-logreg">Trained: TF-IDF + Logistic Regression (Default)</option>
+                    <option value="keras-lstm">Deep Learning: Keras Bidirectional LSTM</option>
                     <option value="vader">Lexicon: VADER Rule-Based</option>
                   </select>
                 </div>

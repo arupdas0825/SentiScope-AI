@@ -28,6 +28,8 @@ export function BatchAnalysisPage() {
   const [csvResult, setCsvResult] = useState(null);
   const [csvLoading, setCsvLoading] = useState(false);
 
+  // Model selection state
+  const [modelId, setModelId] = useState("tfidf-logreg");
   const [error, setError] = useState(null);
 
   // Handle Multiline Batch Analysis
@@ -47,7 +49,7 @@ export function BatchAnalysisPage() {
     try {
       setBulkLoading(true);
       setError(null);
-      const res = await api.analyzeBulk(lines);
+      const res = await api.analyzeBulk(lines, modelId);
       setBulkResults(res);
     } catch (err) {
       console.error(err);
@@ -65,7 +67,7 @@ export function BatchAnalysisPage() {
     try {
       setCsvLoading(true);
       setError(null);
-      const res = await api.uploadCSV(csvFile, textColumn || undefined);
+      const res = await api.uploadCSV(csvFile, textColumn || undefined, modelId);
       setCsvResult(res);
     } catch (err) {
       console.error(err);
@@ -84,37 +86,52 @@ export function BatchAnalysisPage() {
         </p>
       </div>
 
-      {/* Mode Tabs */}
-      <div className="flex border-b border-border space-x-6">
-        <button
-          onClick={() => {
-            setActiveTab("paste");
-            setError(null);
-          }}
-          className={`pb-3 text-sm font-medium border-b-2 flex items-center gap-2 transition-colors cursor-pointer ${
-            activeTab === "paste"
-              ? "border-primary text-primary font-semibold"
-              : "border-transparent text-text-muted hover:text-text"
-          }`}
-        >
-          <FileText className="w-4 h-4" />
-          Paste Comments (Up to 500 lines)
-        </button>
+      {/* Mode Tabs & Model Selector */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-border gap-3 pb-1">
+        <div className="flex space-x-6">
+          <button
+            onClick={() => {
+              setActiveTab("paste");
+              setError(null);
+            }}
+            className={`pb-3 text-sm font-medium border-b-2 flex items-center gap-2 transition-colors cursor-pointer ${
+              activeTab === "paste"
+                ? "border-primary text-primary font-semibold"
+                : "border-transparent text-text-muted hover:text-text"
+            }`}
+          >
+            <FileText className="w-4 h-4" />
+            Paste Comments (Up to 500 lines)
+          </button>
 
-        <button
-          onClick={() => {
-            setActiveTab("csv");
-            setError(null);
-          }}
-          className={`pb-3 text-sm font-medium border-b-2 flex items-center gap-2 transition-colors cursor-pointer ${
-            activeTab === "csv"
-              ? "border-primary text-primary font-semibold"
-              : "border-transparent text-text-muted hover:text-text"
-          }`}
-        >
-          <FileSpreadsheet className="w-4 h-4" />
-          CSV Dataset Upload
-        </button>
+          <button
+            onClick={() => {
+              setActiveTab("csv");
+              setError(null);
+            }}
+            className={`pb-3 text-sm font-medium border-b-2 flex items-center gap-2 transition-colors cursor-pointer ${
+              activeTab === "csv"
+                ? "border-primary text-primary font-semibold"
+                : "border-transparent text-text-muted hover:text-text"
+            }`}
+          >
+            <FileSpreadsheet className="w-4 h-4" />
+            CSV Dataset Upload
+          </button>
+        </div>
+
+        <div className="flex items-center gap-2 pb-2 sm:pb-0">
+          <label className="text-xs text-text-muted font-medium whitespace-nowrap">Engine:</label>
+          <select
+            value={modelId}
+            onChange={(e) => setModelId(e.target.value)}
+            className="text-xs bg-surface-muted border border-border rounded-lg px-2.5 py-1 text-text focus:outline-none focus:ring-1 focus:ring-primary cursor-pointer font-medium"
+          >
+            <option value="tfidf-logreg">Trained: TF-IDF + Logistic Regression</option>
+            <option value="keras-lstm">Deep Learning: Keras BiLSTM</option>
+            <option value="vader">Lexicon: VADER Rule-Based</option>
+          </select>
+        </div>
       </div>
 
       {error && (

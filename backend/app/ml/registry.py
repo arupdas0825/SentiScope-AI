@@ -29,6 +29,16 @@ class ModelRegistry:
             self._loaded_engines[model_id] = engine
             return engine
 
+        elif model_id == "keras-lstm":
+            artifact_file = self.artifacts_dir / "keras-lstm" / "model.keras"
+            if not artifact_file.exists():
+                raise ModelUnavailable(f"Trained model artifact for '{model_id}' is not yet built.")
+            self._verify_checksum(artifact_file)
+            from backend.app.ml.engines.keras_lstm import KerasLSTMEngine
+            engine = KerasLSTMEngine(artifact_file)
+            self._loaded_engines[model_id] = engine
+            return engine
+
         elif model_id == "vader":
             engine = VaderEngine()
             self._loaded_engines[model_id] = engine
@@ -58,7 +68,9 @@ class ModelRegistry:
             {
                 "id": "tfidf-logreg-v1",
                 "model_id": "tfidf-logreg",
+                "name": "TF-IDF + Logistic Regression",
                 "kind": "trained",
+                "architecture": "Classical Machine Learning (TF-IDF + LogReg)",
                 "version": "20261106-v1.0.0",
                 "supports_neutral": True,
                 "classes": ["negative", "neutral", "positive"],
@@ -66,9 +78,23 @@ class ModelRegistry:
                 "metrics": self.get_metrics("tfidf-logreg")
             },
             {
+                "id": "keras-lstm-v1",
+                "model_id": "keras-lstm",
+                "name": "Keras Bidirectional LSTM",
+                "kind": "deep_learning",
+                "architecture": "Deep Learning (Word Embedding + BiLSTM + Dense)",
+                "version": "20261107-v1.0.0",
+                "supports_neutral": True,
+                "classes": ["negative", "neutral", "positive"],
+                "is_default": False,
+                "metrics": self.get_metrics("keras-lstm")
+            },
+            {
                 "id": "vader-lexicon-v1",
                 "model_id": "vader",
+                "name": "VADER Lexicon Baseline",
                 "kind": "lexicon",
+                "architecture": "Rule-Based Lexicon & Sentiment Heuristics",
                 "version": "vader-lexicon-3.3.2",
                 "supports_neutral": True,
                 "classes": ["negative", "neutral", "positive"],
@@ -90,4 +116,3 @@ class ModelRegistry:
 
 
 model_registry = ModelRegistry(settings.artifacts_dir)
-

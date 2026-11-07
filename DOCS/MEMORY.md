@@ -104,7 +104,10 @@ Status as of 2026-11-06 (Complete Application Implemented):
 - **Documentation baseline:** Updated and aligned with SentiScope AI specifications.
 - **Frontend:** Fully implemented with React 18, Vite 6, Tailwind CSS, TanStack Query v5, Recharts, and Lucide React. Production build compiled cleanly to `frontend/dist/`.
 - **Backend:** Modular FastAPI application under `/api/v1` with Pydantic v2 schemas, central error envelopes, and request ID tracking.
-- **ML pipeline:** Fully implemented in `ml/`. TweetEval (SemEval-2017 Task 4) benchmark dataset downloaded and prepared (45,615 train / 2,000 val / 12,284 test). Model A (`TF-IDF + Logistic Regression`) trained and evaluated on the official held-out test split (Accuracy: 58.6%, Macro-F1: 0.584). `metrics.json` and official plotted `confusion_matrix.png` generated and verified with SHA-256 manifests.
+- **ML pipeline:** Fully implemented in `ml/`. TweetEval (SemEval-2017 Task 4) benchmark dataset downloaded and prepared (45,615 train / 2,000 val / 12,284 test).
+  - **Model A (Baseline):** `TF-IDF + Logistic Regression` trained and evaluated on official held-out test split (Accuracy: 58.56%, Macro-F1: 0.584, Weighted-F1: 0.584). Artifacts in `artifacts/models/tfidf-logreg/`.
+  - **Model B (Deep Learning - Phase 8):** `Keras Bidirectional LSTM` (Embedding 64, BiLSTM 32, Dense, 795,011 params) trained and evaluated on the exact same test split (Accuracy: 56.18%, Macro-F1: 0.561, Negative Recall: 75.81%). Artifacts in `artifacts/models/keras-lstm/`.
+  - **Comparative Model Registry:** Both models available via `/api/v1/models` and compared side-by-side with interactive charts and confusion matrices in the Model Evaluation UI.
 - **Database:** SQLite with WAL mode via SQLAlchemy 2.x initialized with schemas for `datasets`, `model_versions`, `analysis_runs`, `predictions`, and `jobs`.
 - **Modules Implemented:**
   1. Executive Dashboard (KPIs, donut distribution, time trends, recent analyses, model profile).

@@ -1,0 +1,21 @@
+{
+  "model_id": "keras-lstm",
+  "version": "20261107-v1.0.0",
+  "framework": "TensorFlow / Keras",
+  "hyperparameters": {
+    "max_tokens": 12000,
+    "max_length": 50,
+    "embedding_dim": 64,
+    "lstm_units": 32,
+    "batch_size": 128,
+    "optimizer": "adam",
+    "learning_rate": 0.001
+  },
+  "artifacts": {
+    "model": "model.keras",
+    "vocab": "vocab.json",
+    "metrics": "metrics.json",
+    "confusion_matrix_png": "confusion_matrix.png",
+    "confusion_matrix_svg": "confusion_matrix.svg"
+  }
+}
