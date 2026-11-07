@@ -3,55 +3,86 @@
 @tailwind utilities;
 
 :root {
-  /* Light Theme (Default) per DESIGN.md §3 */
-  --bg: #F6F8FB;
+  /* Light Theme — Premium SaaS */
+  --bg: #F8FAFC;
   --surface: #FFFFFF;
-  --surface-muted: #F1F4F8;
-  --text: #172033;
-  --text-muted: #687386;
-  --border: #E3E8EF;
-  
-  --primary: #315FEA;
-  --primary-hover: #254BC4;
-  
-  --positive: #159A68;
-  --positive-soft: #E7F6F0;
-  
-  --negative: #D94B55;
-  --negative-soft: #FDEEEE;
-  
-  --neutral: #D18A24;
-  --neutral-soft: #FEF6EB;
-  
-  --info: #3978C8;
-  --warning: #B7791F;
-  --danger: #C83D49;
+  --surface-muted: #F1F5F9;
+  --surface-hover: #E2E8F0;
+  --text: #0F172A;
+  --text-muted: #64748B;
+  --text-subtle: #94A3B8;
+  --border: #E2E8F0;
+  --border-strong: #CBD5E1;
+
+  --primary: #4F46E5;
+  --primary-hover: #4338CA;
+  --primary-soft: #EEF2FF;
+  --primary-muted: #C7D2FE;
+
+  --positive: #10B981;
+  --positive-soft: #ECFDF5;
+  --positive-muted: #A7F3D0;
+
+  --negative: #EF4444;
+  --negative-soft: #FEF2F2;
+  --negative-muted: #FECACA;
+
+  --neutral: #F59E0B;
+  --neutral-soft: #FFFBEB;
+  --neutral-muted: #FDE68A;
+
+  --info: #3B82F6;
+  --info-soft: #EFF6FF;
+
+  --warning: #F59E0B;
+  --danger: #EF4444;
+
+  --shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.08), 0 1px 2px -1px rgb(0 0 0 / 0.08);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.08), 0 2px 4px -2px rgb(0 0 0 / 0.08);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.08), 0 4px 6px -4px rgb(0 0 0 / 0.05);
 }
 
 .dark {
-  /* Dark Theme per DESIGN.md §3 */
-  --bg: #10151F;
-  --surface: #171F2C;
-  --surface-muted: #202B3A;
-  --text: #EDF2F8;
-  --text-muted: #A3AFBF;
-  --border: #2B394B;
-  
-  --primary: #83A5FF;
-  --primary-hover: #98B5FF;
-  
-  --positive: #43C995;
-  --positive-soft: #123325;
-  
-  --negative: #FF747C;
-  --negative-soft: #381B20;
-  
-  --neutral: #F0B95D;
-  --neutral-soft: #382B14;
-  
-  --info: #83B8FF;
-  --warning: #F0B95D;
-  --danger: #FF747C;
+  /* Dark Theme */
+  --bg: #0B0F1A;
+  --surface: #111827;
+  --surface-muted: #1F2937;
+  --surface-hover: #2D3748;
+  --text: #F9FAFB;
+  --text-muted: #9CA3AF;
+  --text-subtle: #6B7280;
+  --border: #1F2937;
+  --border-strong: #374151;
+
+  --primary: #818CF8;
+  --primary-hover: #A5B4FC;
+  --primary-soft: #1E1B4B;
+  --primary-muted: #3730A3;
+
+  --positive: #34D399;
+  --positive-soft: #064E3B;
+  --positive-muted: #065F46;
+
+  --negative: #F87171;
+  --negative-soft: #450A0A;
+  --negative-muted: #7F1D1D;
+
+  --neutral: #FCD34D;
+  --neutral-soft: #451A03;
+  --neutral-muted: #78350F;
+
+  --info: #60A5FA;
+  --info-soft: #1E3A5F;
+
+  --shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.3);
+  --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.3), 0 1px 2px -1px rgb(0 0 0 / 0.3);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4), 0 2px 4px -2px rgb(0 0 0 / 0.4);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.5), 0 4px 6px -4px rgb(0 0 0 / 0.4);
+}
+
+* {
+  box-sizing: border-box;
 }
 
 body {
@@ -60,21 +91,37 @@ body {
   background-color: var(--bg);
   color: var(--text);
   min-height: 100vh;
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 /* Custom Scrollbar */
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-::-webkit-scrollbar-track {
-  background: var(--bg);
-}
-::-webkit-scrollbar-thumb {
-  background: var(--border);
-  border-radius: 4px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: var(--text-muted);
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 999px; }
+::-webkit-scrollbar-thumb:hover { background: var(--border-strong); }
+
+/* Focus ring */
+:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
 }
 
+/* Smooth transitions for theme change */
+*, *::before, *::after {
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.1s ease;
+}
+
+/* Prevent transition on initial load for inputs */
+input, textarea, button {
+  transition: none;
+}
+input:not(:focus), textarea:not(:focus) {
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+/* Chart tooltip */
+.recharts-tooltip-wrapper {
+  outline: none !important;
+}

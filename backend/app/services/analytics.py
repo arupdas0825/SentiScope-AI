@@ -158,3 +158,42 @@ class AnalyticsService:
             has_data=True
         )
 
+    @staticmethod
+    def get_trends(db: Session, days: int = 7) -> List[TrendPoint]:
+        """Aggregate daily sentiment counts over the specified lookback days."""
+        cutoff = datetime.datetime.utcnow() - datetime.timedelta(days=days)
+        date_col = func.date(func.coalesce(Prediction.item_date, Prediction.created_at))
+        trend_rows = (
+            db.query(
+                date_col.label("day"),
+                Prediction.label,
+                func.count(Prediction.id)
+            )
+            .filter(func.coalesce(Prediction.item_date, Prediction.created_at) >= cutoff)
+            .group_by("day", Prediction.label)
+            .order_by("day")
+            .all()
+        )
+
+        trend_map: Dict[str, Dict[str, int]] = {}
+        for day_str, label, count in trend_rows:
+            if not day_str:
+                continue
+            day_key = str(day_str)
+            if day_key not in trend_map:
+                trend_map[day_key] = {"positive": 0, "neutral": 0, "negative": 0}
+            trend_map[day_key][label] = count
+
+        trends = []
+        for day_str, counts in sorted(trend_map.items()):
+            tot = counts["positive"] + counts["neutral"] + counts["negative"]
+            trends.append(TrendPoint(
+                date=day_str,
+                positive=counts["positive"],
+                neutral=counts["neutral"],
+                negative=counts["negative"],
+                total=tot
+            ))
+        return trends
+
+

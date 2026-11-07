@@ -33,3 +33,4 @@ def cleanup_test_db():
             TEST_DB_PATH.unlink()
     except Exception:
         pass
+

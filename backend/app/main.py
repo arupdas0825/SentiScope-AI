@@ -18,6 +18,7 @@ from backend.app.api.v1.models import router as models_router
 from backend.app.api.v1.history import router as history_router
 from backend.app.api.v1.reports import router as reports_router
 from backend.app.api.v1.datasets import router as datasets_router
+from backend.app.api.v1.dashboard import router as dashboard_router
 
 
 class TimingAndRequestIdMiddleware:
@@ -86,6 +87,7 @@ def create_app() -> FastAPI:
     app.include_router(history_router, prefix=settings.api_v1_prefix)
     app.include_router(reports_router, prefix=settings.api_v1_prefix)
     app.include_router(datasets_router, prefix=settings.api_v1_prefix)
+    app.include_router(dashboard_router, prefix=settings.api_v1_prefix)
 
     # Mount compiled React frontend if present
     frontend_dist = settings.data_dir.parent / "frontend" / "dist"
