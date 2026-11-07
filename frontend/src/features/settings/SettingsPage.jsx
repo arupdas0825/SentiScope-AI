@@ -89,63 +89,63 @@ export function SettingsPage() {
           </div>
         </Card>
 
-        {/* Project & Academic Attribution */}
-        <Card title="Academic Attribution & Team" subtitle="Brainware University B.Tech CSE (AI) Capstone Project" className="md:col-span-2">
+        {/* System & Architecture Specifications */}
+        <Card title="System Architecture & Environment" subtitle="SentiScope AI Enterprise Platform Specifications" className="md:col-span-2">
           <div className="space-y-4">
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 text-xs">
               <div className="p-3.5 bg-surface-muted rounded-xl border border-border space-y-1">
-                <span className="text-text-muted font-medium block">Project Lead & Full-Stack</span>
-                <span className="font-bold text-text block text-sm">Arup Das</span>
-                <span className="text-[11px] font-mono text-primary font-semibold block">BWU/BTA/24/641</span>
+                <span className="text-text-muted font-medium block">Machine Learning Core</span>
+                <span className="font-bold text-text block text-sm">TF-IDF + LogReg</span>
+                <span className="text-[11px] font-mono text-primary font-semibold block">Scikit-Learn 1.3+</span>
                 <div className="text-[10px] text-text-muted space-y-0.5 pt-1 border-t border-border/50">
-                  <div>Roll: <span className="font-mono text-text">24103320601</span></div>
-                  <div>Reg: <span className="font-mono text-text">24103000622</span></div>
+                  <div>Features: <span className="font-mono text-text">5,000 N-Grams</span></div>
+                  <div>Accuracy: <span className="font-mono text-text">58.56% Benchmark</span></div>
                 </div>
               </div>
 
               <div className="p-3.5 bg-surface-muted rounded-xl border border-border space-y-1">
-                <span className="text-text-muted font-medium block">Backend & Database</span>
-                <span className="font-bold text-text block text-sm">Rajarshi Laksman</span>
-                <span className="text-[11px] font-mono text-primary font-semibold block">BWU/BTA/24/638</span>
+                <span className="text-text-muted font-medium block">Deep Learning Engine</span>
+                <span className="font-bold text-text block text-sm">BiLSTM Network</span>
+                <span className="text-[11px] font-mono text-primary font-semibold block">Keras / TensorFlow</span>
                 <div className="text-[10px] text-text-muted space-y-0.5 pt-1 border-t border-border/50">
-                  <div>Roll: <span className="font-mono text-text">24103320599</span></div>
-                  <div>Reg: <span className="font-mono text-text">24103000619</span></div>
+                  <div>Embedding: <span className="font-mono text-text">100D GloVe</span></div>
+                  <div>Weights: <span className="font-mono text-text">NumPy Quantized</span></div>
                 </div>
               </div>
 
               <div className="p-3.5 bg-surface-muted rounded-xl border border-border space-y-1">
-                <span className="text-text-muted font-medium block">AI/ML Engineer</span>
-                <span className="font-bold text-text block text-sm">Aditya Bar</span>
-                <span className="text-[11px] font-mono text-primary font-semibold block">BWU/BTA/24/651</span>
+                <span className="text-text-muted font-medium block">Rule-Based Engine</span>
+                <span className="font-bold text-text block text-sm">VADER Lexicon</span>
+                <span className="text-[11px] font-mono text-primary font-semibold block">vaderSentiment</span>
                 <div className="text-[10px] text-text-muted space-y-0.5 pt-1 border-t border-border/50">
-                  <div>Roll: <span className="font-mono text-text">24103320611</span></div>
-                  <div>Reg: <span className="font-mono text-text">24103000632</span></div>
+                  <div>Polarity: <span className="font-mono text-text">Compound Score</span></div>
+                  <div>Threshold: <span className="font-mono text-text">±0.05 Calibrated</span></div>
                 </div>
               </div>
 
               <div className="p-3.5 bg-surface-muted rounded-xl border border-border space-y-1">
-                <span className="text-text-muted font-medium block">Frontend & UI/UX</span>
-                <span className="font-bold text-text block text-sm">Pranay Naskar</span>
-                <span className="text-[11px] font-mono text-primary font-semibold block">BWU/BTA/24/656</span>
+                <span className="text-text-muted font-medium block">API & Pipeline</span>
+                <span className="font-bold text-text block text-sm">FastAPI + Async</span>
+                <span className="text-[11px] font-mono text-primary font-semibold block">Python 3.11 / 3.13</span>
                 <div className="text-[10px] text-text-muted space-y-0.5 pt-1 border-t border-border/50">
-                  <div>Roll: <span className="font-mono text-text">24103320616</span></div>
-                  <div>Reg: <span className="font-mono text-text">24103000637</span></div>
+                  <div>Store: <span className="font-mono text-text">SQLAlchemy Core</span></div>
+                  <div>Security: <span className="font-mono text-text">Strict CORS & CSP</span></div>
                 </div>
               </div>
             </div>
 
             <div className="p-3.5 bg-surface-muted/60 rounded-xl border border-border/70 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 text-xs text-text-muted">
               <div>
-                <span className="font-semibold text-text block">Course Details:</span>
-                <span>Artificial Intelligence Lab (<span className="font-mono text-primary font-semibold">BTA59117</span>)</span>
+                <span className="font-semibold text-text block">Benchmark Dataset:</span>
+                <span>TweetEval 3-Class Sentiment (<span className="font-mono text-primary font-semibold">SemEval-2017 Task 4A</span>)</span>
               </div>
               <div>
-                <span className="font-semibold text-text block">Semester & Session:</span>
-                <span>5th Semester (3rd Year) · Session 2024–2025</span>
+                <span className="font-semibold text-text block">Runtime Stack:</span>
+                <span>FastAPI 0.110+ · Vite 6 · React 18 · Tailwind CSS</span>
               </div>
               <div>
-                <span className="font-semibold text-text block">Academic Institution:</span>
-                <span>Brainware University, Barasat, Kolkata</span>
+                <span className="font-semibold text-text block">Data Security & Compliance:</span>
+                <span>Client-Side Tokenization · Formula Injection Protection</span>
               </div>
             </div>
           </div>

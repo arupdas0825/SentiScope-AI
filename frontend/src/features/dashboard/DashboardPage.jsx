@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
   ResponsiveContainer,
@@ -49,6 +49,31 @@ export function DashboardPage() {
   const [trendDays, setTrendDays] = useState(7);
   const [trendData, setTrendData] = useState([]);
   const [trendLoading, setTrendLoading] = useState(false);
+
+  // Ensure continuous dates so Recharts Area/Line chart renders smooth connected curves
+  const displayTrendData = useMemo(() => {
+    if (!trendData || trendData.length === 0) return [];
+    if (trendData.length === 1) {
+      const single = trendData[0];
+      const singleDate = new Date(single.date || Date.now());
+      const padded = [];
+      const count = trendDays || 7;
+      for (let i = count - 1; i >= 1; i--) {
+        const d = new Date(singleDate);
+        d.setDate(d.getDate() - i);
+        padded.push({
+          date: d.toISOString().split("T")[0],
+          positive: 0,
+          neutral: 0,
+          negative: 0,
+          total: 0,
+        });
+      }
+      padded.push(single);
+      return padded;
+    }
+    return trendData;
+  }, [trendData, trendDays]);
 
   // Selected item modal state
   const [selectedRecord, setSelectedRecord] = useState(null);
@@ -472,10 +497,10 @@ export function DashboardPage() {
               <div className="h-full flex items-center justify-center">
                 <Skeleton className="w-full h-full rounded-xl" />
               </div>
-            ) : trendData.length > 0 ? (
+            ) : displayTrendData.length > 0 ? (
               <ResponsiveContainer width="100%" height="100%">
                 <AreaChart
-                  data={trendData}
+                  data={displayTrendData}
                   margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
                 >
                   <defs>
@@ -503,6 +528,19 @@ export function DashboardPage() {
                     tick={{ fill: "#94A3B8", fontSize: 11 }}
                     tickLine={false}
                     axisLine={false}
+                    tickFormatter={(str) => {
+                      if (!str) return "";
+                      try {
+                        const parts = str.split("-");
+                        if (parts.length === 3) {
+                          const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+                          const m = parseInt(parts[1], 10) - 1;
+                          const d = parseInt(parts[2], 10);
+                          return `${monthNames[m]} ${d}`;
+                        }
+                      } catch {}
+                      return str;
+                    }}
                   />
                   <YAxis
                     tick={{ fill: "#94A3B8", fontSize: 11 }}
@@ -513,10 +551,18 @@ export function DashboardPage() {
                   <RechartsTooltip
                     content={({ active, payload, label }) => {
                       if (active && payload && payload.length) {
+                        let formattedLabel = label;
+                        try {
+                          const parts = label.split("-");
+                          if (parts.length === 3) {
+                            const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+                            formattedLabel = `${monthNames[parseInt(parts[1], 10) - 1]} ${parseInt(parts[2], 10)}, ${parts[0]}`;
+                          }
+                        } catch {}
                         return (
                           <div className="bg-slate-900 text-white text-xs p-3 rounded-xl shadow-xl border border-slate-800 space-y-1.5 min-w-[140px]">
                             <p className="font-semibold text-slate-200 border-b border-slate-800 pb-1">
-                              {label}
+                              {formattedLabel}
                             </p>
                             {payload.map((entry) => (
                               <div
@@ -546,27 +592,33 @@ export function DashboardPage() {
                     dataKey="positive"
                     name="Positive"
                     stroke="#10B981"
-                    strokeWidth={2}
+                    strokeWidth={2.5}
                     fillOpacity={1}
                     fill="url(#colorPos)"
+                    dot={{ r: 3, fill: "#10B981", strokeWidth: 1 }}
+                    activeDot={{ r: 5 }}
                   />
                   <Area
                     type="monotone"
                     dataKey="neutral"
                     name="Neutral"
                     stroke="#F59E0B"
-                    strokeWidth={2}
+                    strokeWidth={2.5}
                     fillOpacity={1}
                     fill="url(#colorNeu)"
+                    dot={{ r: 3, fill: "#F59E0B", strokeWidth: 1 }}
+                    activeDot={{ r: 5 }}
                   />
                   <Area
                     type="monotone"
                     dataKey="negative"
                     name="Negative"
                     stroke="#EF4444"
-                    strokeWidth={2}
+                    strokeWidth={2.5}
                     fillOpacity={1}
                     fill="url(#colorNeg)"
+                    dot={{ r: 3, fill: "#EF4444", strokeWidth: 1 }}
+                    activeDot={{ r: 5 }}
                   />
                 </AreaChart>
               </ResponsiveContainer>

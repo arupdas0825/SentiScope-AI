@@ -73,7 +73,14 @@ class AnalyticsService:
             DistributionItem(name="Negative", value=neg, color="#D94B55"),
         ]
 
-        # Trends (group by item_date or created_at day)
+        # Trends (group by item_date or created_at day with 7-day continuous window)
+        today = datetime.datetime.utcnow().date()
+        date_list = [today - datetime.timedelta(days=i) for i in reversed(range(7))]
+        trend_map: Dict[str, Dict[str, int]] = {
+            d.isoformat(): {"positive": 0, "neutral": 0, "negative": 0}
+            for d in date_list
+        }
+
         date_col = func.date(func.coalesce(Prediction.item_date, Prediction.created_at))
         trend_rows = (
             db.query(
@@ -86,13 +93,13 @@ class AnalyticsService:
             .all()
         )
 
-        trend_map: Dict[str, Dict[str, int]] = {}
         for day_str, label, count in trend_rows:
             if not day_str:
                 continue
-            if day_str not in trend_map:
-                trend_map[day_str] = {"positive": 0, "neutral": 0, "negative": 0}
-            trend_map[day_str][label] = count
+            day_key = str(day_str)
+            if day_key not in trend_map:
+                trend_map[day_key] = {"positive": 0, "neutral": 0, "negative": 0}
+            trend_map[day_key][label] = count
 
         trends = []
         for day_str, counts in sorted(trend_map.items()):
@@ -160,7 +167,14 @@ class AnalyticsService:
 
     @staticmethod
     def get_trends(db: Session, days: int = 7) -> List[TrendPoint]:
-        """Aggregate daily sentiment counts over the specified lookback days."""
+        """Aggregate daily sentiment counts over the specified lookback days with continuous date sequence."""
+        today = datetime.datetime.utcnow().date()
+        date_list = [today - datetime.timedelta(days=i) for i in reversed(range(days))]
+        trend_map: Dict[str, Dict[str, int]] = {
+            d.isoformat(): {"positive": 0, "neutral": 0, "negative": 0}
+            for d in date_list
+        }
+
         cutoff = datetime.datetime.utcnow() - datetime.timedelta(days=days)
         date_col = func.date(func.coalesce(Prediction.item_date, Prediction.created_at))
         trend_rows = (
@@ -175,7 +189,6 @@ class AnalyticsService:
             .all()
         )
 
-        trend_map: Dict[str, Dict[str, int]] = {}
         for day_str, label, count in trend_rows:
             if not day_str:
                 continue
