@@ -31,7 +31,7 @@ def _softmax(x: np.ndarray) -> np.ndarray:
 class NumpyBiLSTMRunner:
     """Exact mathematical forward-pass executor for the trained Keras BiLSTM network.
     
-    Evaluates the exact trained weights from model.weights.h5 without requiring
+    Evaluates the exact trained weights from weights.npz or model.weights.h5 without requiring
     the bulky 500MB+ TensorFlow C++ runtime in memory-constrained cloud environments.
     """
     def __init__(self, artifact_path: Path, vocab_path: Path):
@@ -40,23 +40,42 @@ class NumpyBiLSTMRunner:
             self.vocab = json.load(f)
         self.word2idx = {w: i for i, w in enumerate(self.vocab)}
 
+        # 1. Prefer pure NumPy compressed archive (zero extra dependencies, fast & low memory)
+        weights_npz = artifact_path.parent / "weights.npz"
+        if weights_npz.exists():
+            try:
+                data = np.load(weights_npz)
+                self.embed_weights = data["embed_weights"]
+                self.f_kernel = data["f_kernel"]
+                self.f_recurrent = data["f_recurrent"]
+                self.f_bias = data["f_bias"]
+                self.b_kernel = data["b_kernel"]
+                self.b_recurrent = data["b_recurrent"]
+                self.b_bias = data["b_bias"]
+                self.d1_w = data["d1_w"]
+                self.d1_b = data["d1_b"]
+                self.d2_w = data["d2_w"]
+                self.d2_b = data["d2_b"]
+                logger.info("Loaded exact BiLSTM weights from weights.npz via pure NumPy.")
+                return
+            except Exception as e_npz:
+                logger.warning(f"Could not load weights.npz ({e_npz}). Falling back to model.weights.h5...")
+
+        # 2. Fallback to h5py extraction from model.keras zip archive
         try:
             import h5py
         except ImportError as e:
-            raise ModelUnavailable("h5py is required for reading Keras model weights.") from e
+            raise ModelUnavailable("h5py or weights.npz is required for reading Keras model weights.") from e
 
         with zipfile.ZipFile(artifact_path, "r") as z:
             with h5py.File(io.BytesIO(z.read("model.weights.h5")), "r") as hf:
                 self.embed_weights = np.array(hf["layers/embedding/vars/0"])
-                # Forward LSTM cell weights
                 self.f_kernel = np.array(hf["layers/bidirectional/forward_layer/cell/vars/0"])
                 self.f_recurrent = np.array(hf["layers/bidirectional/forward_layer/cell/vars/1"])
                 self.f_bias = np.array(hf["layers/bidirectional/forward_layer/cell/vars/2"])
-                # Backward LSTM cell weights
                 self.b_kernel = np.array(hf["layers/bidirectional/backward_layer/cell/vars/0"])
                 self.b_recurrent = np.array(hf["layers/bidirectional/backward_layer/cell/vars/1"])
                 self.b_bias = np.array(hf["layers/bidirectional/backward_layer/cell/vars/2"])
-                # Dense layers
                 self.d1_w = np.array(hf["layers/dense/vars/0"])
                 self.d1_b = np.array(hf["layers/dense/vars/1"])
                 self.d2_w = np.array(hf["layers/dense_1/vars/0"])
