@@ -26,9 +26,21 @@ class KerasLSTMEngine(BaseEngine):
         self._load_model()
 
     def _load_model(self):
-        import tensorflow as tf
-        from tensorflow import keras
-        from keras import layers
+        try:
+            import tensorflow as tf
+            from tensorflow import keras
+            from tensorflow.keras import layers
+        except (ImportError, AttributeError):
+            try:
+                # pyrefly: ignore[missing-import]
+                import keras
+                # pyrefly: ignore[missing-import]
+                from keras import layers
+            except ImportError as err:
+                raise ImportError(
+                    f"TensorFlow/Keras is not installed or cannot be found: {err}. "
+                    f"Ensure you are running with the project Python 3.13 environment."
+                ) from err
 
         if not self.artifact_path.exists():
             raise FileNotFoundError(f"Model artifact not found at {self.artifact_path}")
@@ -50,15 +62,21 @@ class KerasLSTMEngine(BaseEngine):
         self.vectorizer.set_vocabulary(vocab)
 
     def predict_proba(self, texts: Sequence[str]) -> np.ndarray:
+        if not texts:
+            return np.empty((0, len(self.classes)), dtype=np.float32)
         cleaned = [preprocess_for_tfidf(t) for t in texts]
         seqs = self.vectorizer(cleaned).numpy()
-        probs = self.model.predict(seqs, batch_size=min(len(texts), 128), verbose=0)
+        batch_size = max(1, min(len(texts), 128))
+        probs = self.model.predict(seqs, batch_size=batch_size, verbose=0)
         return probs
 
     def predict(self, texts: Sequence[str], explain: bool = False) -> List[EnginePrediction]:
+        if not texts:
+            return []
         cleaned = [preprocess_for_tfidf(t) for t in texts]
         seqs = self.vectorizer(cleaned).numpy()
-        probs = self.model.predict(seqs, batch_size=min(len(texts), 128), verbose=0)
+        batch_size = max(1, min(len(texts), 128))
+        probs = self.model.predict(seqs, batch_size=batch_size, verbose=0)
         preds = np.argmax(probs, axis=1)
 
         results = []

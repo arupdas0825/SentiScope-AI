@@ -90,44 +90,62 @@ export function SettingsPage() {
         </Card>
 
         {/* Project & Academic Attribution */}
-        <Card title="Academic Attribution & Team" subtitle="Brainware University Capstone Project Metadata" className="md:col-span-2">
+        <Card title="Academic Attribution & Team" subtitle="Brainware University B.Tech CSE (AI) Capstone Project" className="md:col-span-2">
           <div className="space-y-4">
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 text-xs">
               <div className="p-3.5 bg-surface-muted rounded-xl border border-border space-y-1">
                 <span className="text-text-muted font-medium block">Project Lead & Full-Stack</span>
                 <span className="font-bold text-text block text-sm">Arup Das</span>
-                <span className="text-[11px] font-mono text-primary block">BWU/BTA/24/641</span>
-                <span className="text-[10px] text-text-muted block">Architecture & Integration</span>
+                <span className="text-[11px] font-mono text-primary font-semibold block">BWU/BTA/24/641</span>
+                <div className="text-[10px] text-text-muted space-y-0.5 pt-1 border-t border-border/50">
+                  <div>Roll: <span className="font-mono text-text">24103320601</span></div>
+                  <div>Reg: <span className="font-mono text-text">24103000622</span></div>
+                </div>
               </div>
 
               <div className="p-3.5 bg-surface-muted rounded-xl border border-border space-y-1">
                 <span className="text-text-muted font-medium block">Backend & Database</span>
                 <span className="font-bold text-text block text-sm">Rajarshi Laksman</span>
-                <span className="text-[11px] font-mono text-primary block">BWU/BTA/24/638</span>
-                <span className="text-[10px] text-text-muted block">FastAPI & SQLAlchemy</span>
+                <span className="text-[11px] font-mono text-primary font-semibold block">BWU/BTA/24/638</span>
+                <div className="text-[10px] text-text-muted space-y-0.5 pt-1 border-t border-border/50">
+                  <div>Roll: <span className="font-mono text-text">24103320599</span></div>
+                  <div>Reg: <span className="font-mono text-text">24103000619</span></div>
+                </div>
               </div>
 
               <div className="p-3.5 bg-surface-muted rounded-xl border border-border space-y-1">
                 <span className="text-text-muted font-medium block">AI/ML Engineer</span>
                 <span className="font-bold text-text block text-sm">Aditya Bar</span>
-                <span className="text-[11px] font-mono text-primary block">BWU/BTA/24/651</span>
-                <span className="text-[10px] text-text-muted block">NLP Pipeline & Modeling</span>
+                <span className="text-[11px] font-mono text-primary font-semibold block">BWU/BTA/24/651</span>
+                <div className="text-[10px] text-text-muted space-y-0.5 pt-1 border-t border-border/50">
+                  <div>Roll: <span className="font-mono text-text">24103320611</span></div>
+                  <div>Reg: <span className="font-mono text-text">24103000632</span></div>
+                </div>
               </div>
 
               <div className="p-3.5 bg-surface-muted rounded-xl border border-border space-y-1">
                 <span className="text-text-muted font-medium block">Frontend & UI/UX</span>
                 <span className="font-bold text-text block text-sm">Pranay Naskar</span>
-                <span className="text-[11px] font-mono text-primary block">BWU/BTA/24/656</span>
-                <span className="text-[10px] text-text-muted block">React Dashboard & Charts</span>
+                <span className="text-[11px] font-mono text-primary font-semibold block">BWU/BTA/24/656</span>
+                <div className="text-[10px] text-text-muted space-y-0.5 pt-1 border-t border-border/50">
+                  <div>Roll: <span className="font-mono text-text">24103320616</span></div>
+                  <div>Reg: <span className="font-mono text-text">24103000637</span></div>
+                </div>
               </div>
             </div>
 
-            <div className="p-3 bg-surface-muted/60 rounded-lg border border-border/70 flex flex-wrap items-center justify-between gap-2 text-xs text-text-muted">
+            <div className="p-3.5 bg-surface-muted/60 rounded-xl border border-border/70 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 text-xs text-text-muted">
               <div>
-                <span className="font-semibold text-text">Department:</span> Department of Computer Science & Engineering (Artificial Intelligence)
+                <span className="font-semibold text-text block">Course Details:</span>
+                <span>Artificial Intelligence Lab (<span className="font-mono text-primary font-semibold">BTA59117</span>)</span>
               </div>
               <div>
-                <span className="font-semibold text-text">Institution:</span> Brainware University, Kolkata
+                <span className="font-semibold text-text block">Semester & Session:</span>
+                <span>5th Semester (3rd Year) · Session 2024–2025</span>
+              </div>
+              <div>
+                <span className="font-semibold text-text block">Academic Institution:</span>
+                <span>Brainware University, Barasat, Kolkata</span>
               </div>
             </div>
           </div>

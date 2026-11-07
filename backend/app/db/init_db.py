@@ -30,6 +30,14 @@ def init_db():
                 created_at=datetime.datetime.utcnow(),
             ),
             ModelVersion(
+                id="vader-v1",
+                model_id="vader",
+                kind="lexicon",
+                version="vader-lexicon-3.3.2",
+                metrics_path=None,
+                created_at=datetime.datetime.utcnow(),
+            ),
+            ModelVersion(
                 id="vader-lexicon-v1",
                 model_id="vader",
                 kind="lexicon",

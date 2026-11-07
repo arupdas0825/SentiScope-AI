@@ -4,7 +4,7 @@ import time
 from typing import List, Optional
 from sqlalchemy.orm import Session
 
-from backend.app.db.models import AnalysisRun, Prediction
+from backend.app.db.models import AnalysisRun, Prediction, ModelVersion
 from backend.app.ml.registry import model_registry
 from backend.app.schemas.analyze import (
     SingleTextRequest, PredictionResult, Probabilities,
@@ -40,9 +40,13 @@ class InferenceService:
                 ) for e in pred.explanations
             ]
 
+        # Resolve ModelVersion foreign key
+        mv = db.query(ModelVersion).filter(ModelVersion.model_id == engine.id).first()
+        model_version_id = mv.id if mv else f"{engine.id}-v1"
+
         # Record analysis into database
         run = AnalysisRun(
-            model_version_id=f"{engine.id}-v1",
+            model_version_id=model_version_id,
             source_type="single",
             params={"text_length": len(request.text), "model_id": engine.id},
             summary={"label": pred.label, "confidence": pred.confidence}
@@ -87,9 +91,13 @@ class InferenceService:
         counts = {"positive": 0, "neutral": 0, "negative": 0}
         items = []
 
+        # Resolve ModelVersion foreign key
+        mv = db.query(ModelVersion).filter(ModelVersion.model_id == engine.id).first()
+        model_version_id = mv.id if mv else f"{engine.id}-v1"
+
         # Create Run record
         run = AnalysisRun(
-            model_version_id=f"{engine.id}-v1",
+            model_version_id=model_version_id,
             source_type="bulk",
             params={"batch_size": len(request.texts), "model_id": engine.id}
         )

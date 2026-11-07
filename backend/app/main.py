@@ -20,6 +20,37 @@ from backend.app.api.v1.reports import router as reports_router
 from backend.app.api.v1.datasets import router as datasets_router
 
 
+class TimingAndRequestIdMiddleware:
+    """Pure ASGI middleware for X-Request-ID and X-Response-Time-MS header injection."""
+    def __init__(self, app):
+        self.app = app
+
+    async def __call__(self, scope, receive, send):
+        if scope["type"] != "http":
+            await self.app(scope, receive, send)
+            return
+
+        headers = dict(scope.get("headers", []))
+        req_id = headers.get(b"x-request-id", b"").decode("latin-1")
+        if not req_id:
+            req_id = str(uuid.uuid4())
+
+        scope.setdefault("state", {})["request_id"] = req_id
+        start_time = time.time()
+
+        async def send_wrapper(message):
+            if message["type"] == "http.response.start":
+                process_time = (time.time() - start_time) * 1000
+                headers_list = list(message.get("headers", []))
+                headers_list.append((b"x-request-id", req_id.encode("latin-1")))
+                headers_list.append((b"x-response-time-ms", f"{process_time:.2f}".encode("latin-1")))
+                message = dict(message)
+                message["headers"] = headers_list
+            await send(message)
+
+        await self.app(scope, receive, send_wrapper)
+
+
 def create_app() -> FastAPI:
     app = FastAPI(
         title=settings.app_name,
@@ -38,17 +69,8 @@ def create_app() -> FastAPI:
         allow_headers=["*"],
     )
 
-    # Request ID and Latency Middleware
-    @app.middleware("http")
-    async def request_id_and_timing_middleware(request: Request, call_next):
-        request_id = request.headers.get("X-Request-ID", str(uuid.uuid4()))
-        request.state.request_id = request_id
-        start_time = time.time()
-        response = await call_next(request)
-        process_time = (time.time() - start_time) * 1000
-        response.headers["X-Request-ID"] = request_id
-        response.headers["X-Response-Time-MS"] = f"{process_time:.2f}"
-        return response
+    # Request ID and Latency Middleware (Pure ASGI to prevent AnyIO stream deadlocks in tests)
+    app.add_middleware(TimingAndRequestIdMiddleware)
 
     # Exception Handlers
     app.add_exception_handler(AppException, app_exception_handler)
