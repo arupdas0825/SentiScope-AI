@@ -487,29 +487,31 @@ The baseline models were trained and benchmarked using the **CardiffNLP TweetEva
 
 ## 14. 👥 Project Team
 
-This project is designed, developed, and submitted as an academic AIML lab project under the **Department of Computer Science & Engineering (Artificial Intelligence), Brainware University**.
+This project is designed, developed, and submitted as the official Capstone Lab Project under the **Department of Computer Science & Engineering (Artificial Intelligence), Brainware University**.
 
-| Sl. | Full Name | Student Code | Role | Key Responsibilities |
-|:---:|:---|:---:|:---|:---|
-| 1 | **Arup Das** | `BWU/BTA/24/641` | **Project Lead & Full-Stack Integration Lead** | Project coordination, architecture design, API integration, and final end-to-end testing |
-| 2 | **Rajarshi Laksman** | `BWU/BTA/24/638` | **Backend Developer & Database Engineer** | FastAPI backend architecture, REST API design, SQLite & SQLAlchemy integration, data management |
-| 3 | **Aditya Bar** | `BWU/BTA/24/651` | **AI/ML Engineer** | Dataset preprocessing & pipeline, TF-IDF feature engineering, Logistic Regression model training & evaluation |
-| 4 | **Pranay Naskar** | `BWU/BTA/24/656` | **Frontend Developer & UI/UX Designer** | React analytics dashboard, UI/UX design, interactive charts, and responsive SaaS interface |
+| Sl. | Full Name | Student Code | University Roll No. | Registration No. | Session | Role | Key Responsibilities |
+|:---:|:---|:---:|:---:|:---:|:---:|:---|:---|
+| 1 | **Arup Das** | BWU/BTA/24/641 | 24103320601 | 24103000622 | 2024–2025 | **Project Lead & Full-Stack Integration Lead** | Project coordination, architecture, API integration, final testing |
+| 2 | **Rajarshi Laksman** | BWU/BTA/24/638 | 24103320599 | 24103000619 | 2024–2025 | **Backend Developer & Database Engineer** | FastAPI, REST APIs, SQLite, SQLAlchemy, data management |
+| 3 | **Aditya Bar** | BWU/BTA/24/651 | 24103320611 | 24103000632 | 2024–2025 | **AI/ML Engineer** | Dataset preprocessing, TF-IDF, Logistic Regression, model training and evaluation |
+| 4 | **Pranay Naskar** | BWU/BTA/24/656 | 24103320616 | 24103000637 | 2024–2025 | **Frontend Developer & UI/UX Designer** | React dashboard, UI design, charts, responsive interface |
 
 ---
 
-## 15. Academic Information
+## 15. 🎓 Academic Project Information
 
 - **Institution:** Brainware University
 - **Department:** Department of Computer Science & Engineering – Artificial Intelligence
-- **Degree Program:** Bachelor of Technology in Computer Science and Engineering (AI)
-- **Project Type:** AIML Lab Project
-- **Course Name:** *[Course Name — e.g., Artificial Intelligence & Machine Learning Lab]*
-- **Course Code:** *[Course Code — e.g., PCC-CS-AIML-791]*
-- **Academic Session:** 2026–2027
+- **Degree:** Bachelor of Technology (B.Tech)
+- **Program:** Computer Science and Engineering (Artificial Intelligence)
+- **Course Name:** Artificial Intelligence Lab
+- **Course Code:** BTA59117
+- **Semester:** 5th Semester
+- **Academic Year:** 3rd Year
+- **Registration Session:** 2024–2025
+- **Project Type:** AIML Capstone Lab Project
 - **Submission Date:** November 2026
-- **Location:** Barasat, Kolkata, West Bengal 700125, India
-
+- **Campus Location:** 398, Ramkrishnapur Road, Barasat, Kolkata, West Bengal 700125, India
 ---
 
 ## 16. Limitations and Future Scope
