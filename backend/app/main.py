@@ -65,9 +65,11 @@ def create_app() -> FastAPI:
     app.add_middleware(
         CORSMiddleware,
         allow_origins=settings.cors_origins,
+        allow_origin_regex=r"^https:\/\/.*\.vercel\.app$",
         allow_credentials=True,
-        allow_methods=["GET", "POST", "DELETE", "OPTIONS"],
+        allow_methods=["*"],
         allow_headers=["*"],
+        expose_headers=["X-Request-ID", "X-Response-Time-MS"],
     )
 
     # Request ID and Latency Middleware (Pure ASGI to prevent AnyIO stream deadlocks in tests)
