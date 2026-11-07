@@ -1,9 +1,11 @@
 """Inference service for orchestrating sentiment predictions and database persistence."""
 import hashlib
+import logging
 import time
 from typing import List, Optional
 from sqlalchemy.orm import Session
 
+from backend.app.core.errors import AppException, ModelUnavailable
 from backend.app.db.models import AnalysisRun, Prediction, ModelVersion
 from backend.app.ml.registry import model_registry
 from backend.app.schemas.analyze import (
@@ -12,13 +14,25 @@ from backend.app.schemas.analyze import (
     ExplanationToken
 )
 
+logger = logging.getLogger("sentiscope.inference")
+
 
 class InferenceService:
     @staticmethod
     def analyze_single(request: SingleTextRequest, db: Session) -> PredictionResult:
         t0 = time.time()
-        engine = model_registry.get_engine(request.model_id or "tfidf-logreg")
-        preds = engine.predict([request.text], explain=bool(request.explain))
+        model_id = request.model_id or "tfidf-logreg"
+        logger.info(f"Initiating single text inference with model: '{model_id}' (text_length={len(request.text)})")
+
+        try:
+            engine = model_registry.get_engine(model_id)
+            preds = engine.predict([request.text], explain=bool(request.explain))
+        except AppException:
+            raise
+        except Exception as exc:
+            logger.error(f"Inference execution failed for model '{model_id}': {exc}", exc_info=True)
+            raise ModelUnavailable(f"Model engine '{model_id}' failed during inference: {exc}") from exc
+
         latency = (time.time() - t0) * 1000
 
         pred = preds[0]
@@ -70,6 +84,10 @@ class InferenceService:
         db.add(prediction_record)
         db.commit()
 
+        logger.info(
+            f"Completed single text inference: label={pred.label}, conf={pred.confidence:.4f}, latency={latency:.2f}ms"
+        )
+
         return PredictionResult(
             label=pred.label,
             confidence=pred.confidence,
@@ -84,8 +102,18 @@ class InferenceService:
     @staticmethod
     def analyze_bulk(request: BulkTextRequest, db: Session) -> BulkAnalysisResponse:
         t0 = time.time()
-        engine = model_registry.get_engine(request.model_id or "tfidf-logreg")
-        preds = engine.predict(request.texts, explain=False)
+        model_id = request.model_id or "tfidf-logreg"
+        logger.info(f"Initiating bulk text inference with model: '{model_id}' (batch_size={len(request.texts)})")
+
+        try:
+            engine = model_registry.get_engine(model_id)
+            preds = engine.predict(request.texts, explain=False)
+        except AppException:
+            raise
+        except Exception as exc:
+            logger.error(f"Bulk inference execution failed for model '{model_id}': {exc}", exc_info=True)
+            raise ModelUnavailable(f"Model engine '{model_id}' failed during bulk inference: {exc}") from exc
+
         total_time = (time.time() - t0) * 1000
 
         counts = {"positive": 0, "neutral": 0, "negative": 0}
@@ -146,6 +174,10 @@ class InferenceService:
         run.summary = summary.dict()
         db.commit()
 
+        logger.info(
+            f"Completed bulk text inference: {len(request.texts)} items, total_time={total_time:.2f}ms"
+        )
+
         return BulkAnalysisResponse(
             results=items,
             summary=summary,
@@ -154,4 +186,3 @@ class InferenceService:
             run_id=run.id,
             total_time_ms=round(total_time, 2)
         )
-

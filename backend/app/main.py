@@ -1,4 +1,5 @@
 """FastAPI main application entrypoint for SentiScope AI."""
+import logging
 import time
 import uuid
 from fastapi import FastAPI, Request
@@ -19,6 +20,9 @@ from backend.app.api.v1.history import router as history_router
 from backend.app.api.v1.reports import router as reports_router
 from backend.app.api.v1.datasets import router as datasets_router
 from backend.app.api.v1.dashboard import router as dashboard_router
+
+logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(name)s: %(message)s")
+logger = logging.getLogger("sentiscope.main")
 
 
 class TimingAndRequestIdMiddleware:
@@ -61,25 +65,24 @@ def create_app() -> FastAPI:
         redoc_url="/api/redoc" if settings.debug else None,
     )
 
-    # CORS configuration
+    # 1. Inner ASGI middleware for timing and request ID
+    app.add_middleware(TimingAndRequestIdMiddleware)
+
+    # 2. Outermost ASGI middleware for CORS (handles preflight and sets Access-Control-* headers)
     app.add_middleware(
         CORSMiddleware,
         allow_origins=settings.cors_origins,
         allow_origin_regex=r"^https:\/\/.*\.vercel\.app$",
         allow_credentials=True,
-        allow_methods=["*"],
+        allow_methods=["GET", "POST", "DELETE", "OPTIONS", "PUT", "PATCH"],
         allow_headers=["*"],
         expose_headers=["X-Request-ID", "X-Response-Time-MS"],
     )
 
-    # Request ID and Latency Middleware (Pure ASGI to prevent AnyIO stream deadlocks in tests)
-    app.add_middleware(TimingAndRequestIdMiddleware)
-
-    # Exception Handlers
+    # Exception Handlers (with guaranteed CORS headers)
     app.add_exception_handler(AppException, app_exception_handler)
     app.add_exception_handler(RequestValidationError, validation_exception_handler)
-    if not settings.debug:
-        app.add_exception_handler(Exception, generic_exception_handler)
+    app.add_exception_handler(Exception, generic_exception_handler)
 
     # Mount Routers under /api/v1
     app.include_router(health_router, prefix=settings.api_v1_prefix)
@@ -97,10 +100,20 @@ def create_app() -> FastAPI:
         from fastapi.staticfiles import StaticFiles
         app.mount("/", StaticFiles(directory=str(frontend_dist), html=True), name="frontend")
 
-    # Startup event: initialize DB tables and seeds
+    # Startup event: initialize DB tables, seeds, and pre-warm lexicons
     @app.on_event("startup")
     def on_startup():
         init_db()
+        # Pre-warm NLTK VADER lexicon if available
+        try:
+            import nltk
+            try:
+                nltk.data.find("sentiment/vader_lexicon.zip")
+            except (LookupError, AttributeError):
+                logger.info("Downloading NLTK vader_lexicon on application startup...")
+                nltk.download("vader_lexicon", quiet=True)
+        except Exception as e:
+            logger.warning(f"Startup VADER pre-warm non-critical failure: {e}")
 
     return app
 

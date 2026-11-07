@@ -1,13 +1,16 @@
 """Model Registry for discovering, verifying integrity, and loading sentiment engines."""
 import hashlib
 import json
+import logging
 from pathlib import Path
 from typing import Dict, List, Optional
 from backend.app.core.config import settings
-from backend.app.core.errors import ModelUnavailable
+from backend.app.core.errors import ModelUnavailable, AppException
 from backend.app.ml.engines.base import BaseEngine
 from backend.app.ml.engines.tfidf_logreg import TfidfLogRegEngine
 from backend.app.ml.engines.vader import VaderEngine
+
+logger = logging.getLogger("sentiscope.ml.registry")
 
 
 class ModelRegistry:
@@ -23,26 +26,40 @@ class ModelRegistry:
             artifact_file = self.artifacts_dir / "tfidf-logreg" / "model.joblib"
             if not artifact_file.exists():
                 raise ModelUnavailable(f"Trained model artifact for '{model_id}' is not yet built.")
-            # Verify SHA256 integrity if manifest exists
             self._verify_checksum(artifact_file)
             engine = TfidfLogRegEngine(artifact_file)
             self._loaded_engines[model_id] = engine
+            logger.info(f"Model engine '{model_id}' loaded and cached.")
             return engine
 
         elif model_id == "keras-lstm":
-            artifact_file = self.artifacts_dir / "keras-lstm" / "model.keras"
-            if not artifact_file.exists():
-                raise ModelUnavailable(f"Trained model artifact for '{model_id}' is not yet built.")
-            self._verify_checksum(artifact_file)
-            from backend.app.ml.engines.keras_lstm import KerasLSTMEngine
-            engine = KerasLSTMEngine(artifact_file)
-            self._loaded_engines[model_id] = engine
-            return engine
+            try:
+                artifact_file = self.artifacts_dir / "keras-lstm" / "model.keras"
+                if not artifact_file.exists():
+                    raise ModelUnavailable(f"Trained model artifact for '{model_id}' is not found.")
+                self._verify_checksum(artifact_file)
+                from backend.app.ml.engines.keras_lstm import KerasLSTMEngine
+                engine = KerasLSTMEngine(artifact_file)
+                self._loaded_engines[model_id] = engine
+                logger.info(f"Model engine '{model_id}' loaded and cached.")
+                return engine
+            except AppException:
+                raise
+            except Exception as e:
+                logger.error(f"Failed to load Keras LSTM engine: {e}", exc_info=True)
+                raise ModelUnavailable(f"Keras Bidirectional LSTM engine failed to load: {e}") from e
 
         elif model_id == "vader":
-            engine = VaderEngine()
-            self._loaded_engines[model_id] = engine
-            return engine
+            try:
+                engine = VaderEngine()
+                self._loaded_engines[model_id] = engine
+                logger.info(f"Model engine '{model_id}' loaded and cached.")
+                return engine
+            except AppException:
+                raise
+            except Exception as e:
+                logger.error(f"Failed to load VADER engine: {e}", exc_info=True)
+                raise ModelUnavailable(f"VADER Lexicon engine failed to load: {e}") from e
 
         raise ModelUnavailable(f"Model engine '{model_id}' is not registered.")
 
